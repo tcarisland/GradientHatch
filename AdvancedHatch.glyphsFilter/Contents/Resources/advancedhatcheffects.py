@@ -15,11 +15,25 @@ class AdvancedHatchEffects():
         super().__init__()
 
     @objc.python_method
-    def hatchLayerWithOrigin(self, layer, theta, hatchStroke, hatchStep, hatchOrigin):
+    def hatchLayerWithOrigin(self, layer, theta, enableHatchStroke, hatchStroke, hatchStep, hatchOrigin):
         HatchOutlineFilter = NSClassFromString("HatchOutlineFilter")
         HatchOutlineFilter.hatchLayer_origin_stepWidth_angle_offset_checkSelection_shadowLayer_(layer, (int(hatchOrigin[0]), int(hatchOrigin[1])), hatchStep, theta, 0, False, None)
-        #for myShape in layer.shapes:
-        #    myShape.setAttribute_forKey_(hatchStroke, "strokeWidth")
-        #    myShape.setAttribute_forKey_(2, "lineCapEnd")
-        #    myShape.setAttribute_forKey_(2, "lineCapStart")
+        shapesLength = len(layer.shapes)
+        hatchStart = int(hatchStroke[0])
+        hatchEnd = int(hatchStroke[1])
+        i = 0;
+        if enableHatchStroke:
+            for myShape in layer.shapes:
+                endRatio = i / shapesLength
+                startShare = (1.0 - endRatio) * (hatchStart * 1.0)
+                endShare = endRatio * hatchEnd
+                strokeWidth = int(startShare + endShare)
+                print("endRatio" + str(endRatio))
+                print("startShare" + str(startShare))
+                print("endShare" + str(endShare))
+                print("strokeWidth " + str(strokeWidth))
+                myShape.setAttribute_forKey_(strokeWidth, "strokeWidth")
+                myShape.setAttribute_forKey_(0, "lineCapEnd")
+                myShape.setAttribute_forKey_(0, "lineCapStart")
+                i += 1
         return layer

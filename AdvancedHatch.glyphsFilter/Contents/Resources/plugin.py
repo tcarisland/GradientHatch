@@ -165,20 +165,13 @@ class AdvancedHatch(FilterWithDialog):
 			originY = float(self.pref('originY'))
 			stepWidth = float(self.pref('stepWidth'))
 			useBackground = bool(self.pref('useBackground'))
-			print("angle" + str(angle))
-			print("offsetPath" + str(offsetPath))
-			print("offsetPathEnd" + str(offsetPathEnd))
-			print("offsetPathStart" + str(offsetPathStart))
-			print("originX" + str(originX))
-			print("originY" + str(originY))
-			print("stepWidth" + str(stepWidth))
-			print("useBackground" + str(useBackground))
 		effects = AdvancedHatchEffects()
 		hatchAngle = angle
-		hatchStroke = offsetPathStart
+		enableHatchStroke = offsetPath
+		hatchStroke = [offsetPathStart, offsetPathEnd]
 		hatchStep = stepWidth
 		hatchOrigin = [originX, originY]
-		layer = effects.hatchLayerWithOrigin(layer, hatchAngle, hatchStroke, hatchStep, hatchOrigin)
+		layer = effects.hatchLayerWithOrigin(layer, hatchAngle, enableHatchStroke, hatchStroke, hatchStep, hatchOrigin)
 		effects.hatchLayerWithOrigin()
 		print("filter done")
 
