@@ -17,13 +17,16 @@
 from __future__ import division, print_function, unicode_literals
 # noinspection PyUnresolvedReferences
 import objc
+import copy
 # noinspection PyUnresolvedReferences
 from GlyphsApp import *
 # noinspection PyUnresolvedReferences
 from GlyphsApp.plugins import *
 # noinspection PyUnresolvedReferences
 from Foundation import NSClassFromString
+from advancedhatcheffects import AdvancedHatchEffects
 
+# noinspection PyUnresolvedReferences
 class AdvancedHatch(FilterWithDialog):
 
 	# Definitions of IBOutlets
@@ -83,8 +86,6 @@ class AdvancedHatch(FilterWithDialog):
 		self.stepWidthTextField.setStringValue_(self.pref('stepWidth'))
 		self.offsetPathCheckBox.setState_(self.pref('offsetPath'))
 		self.useBackgroundCheckBox.setState_(self.pref('useBackground'))
-		# Set focus to text field
-		#self.angleTextField.becomeFirstResponder()
 		self.update()
 
 	@objc.python_method
@@ -172,6 +173,13 @@ class AdvancedHatch(FilterWithDialog):
 			print("originY" + str(originY))
 			print("stepWidth" + str(stepWidth))
 			print("useBackground" + str(useBackground))
+		effects = AdvancedHatchEffects()
+		hatchAngle = angle
+		hatchStroke = offsetPathStart
+		hatchStep = stepWidth
+		hatchOrigin = [originX, originY]
+		layer = effects.hatchLayerWithOrigin(layer, hatchAngle, hatchStroke, hatchStep, hatchOrigin)
+		effects.hatchLayerWithOrigin()
 		print("filter done")
 
 	@objc.python_method
