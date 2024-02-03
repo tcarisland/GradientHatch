@@ -172,7 +172,6 @@ class AdvancedHatch(FilterWithDialog):
 		hatchStep = stepWidth
 		hatchOrigin = [originX, originY]
 		layer = effects.hatchLayerWithOrigin(layer, hatchAngle, enableHatchStroke, hatchStroke, hatchStep, hatchOrigin)
-		effects.hatchLayerWithOrigin()
 		print("filter done")
 
 	@objc.python_method
