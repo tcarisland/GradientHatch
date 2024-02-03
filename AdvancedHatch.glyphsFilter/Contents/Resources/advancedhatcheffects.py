@@ -25,17 +25,12 @@ class AdvancedHatchEffects():
         hatchEnd = int(hatchStroke[1])
         i = 0;
         shapes = []
-        layerCopy = copy.deepcopy(layer)
         if enableHatchStroke:
             for myShape in layer.shapes:
                 endRatio = i / shapesLength
                 startShare = (1.0 - endRatio) * (hatchStart * 1.0)
                 endShare = endRatio * hatchEnd
                 strokeWidth = int(startShare + endShare)
-                print("endRatio" + str(endRatio))
-                print("startShare" + str(startShare))
-                print("endShare" + str(endShare))
-                print("strokeWidth " + str(strokeWidth))
                 offsetShapes = OffsetCurveFilter.offsetPath_offsetX_offsetY_makeStroke_position_(myShape, strokeWidth, strokeWidth, True, 0.0)
                 shapes += offsetShapes
                 i += 1
