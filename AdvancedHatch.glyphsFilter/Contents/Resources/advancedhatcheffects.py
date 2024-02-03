@@ -34,7 +34,7 @@ class AdvancedHatchEffects():
                 offsetShapes = OffsetCurveFilter.offsetPath_offsetX_offsetY_makeStroke_position_(myShape, strokeWidth, strokeWidth, True, 0.0)
                 shapes += offsetShapes
                 i += 1
-        layer.shapes = shapes
+            layer.shapes = shapes
         return layer
 
     @objc.python_method
