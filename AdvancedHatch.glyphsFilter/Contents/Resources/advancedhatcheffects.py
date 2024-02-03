@@ -36,9 +36,8 @@ class AdvancedHatchEffects():
                 print("startShare" + str(startShare))
                 print("endShare" + str(endShare))
                 print("strokeWidth " + str(strokeWidth))
-                myShapeLayer = self.getEmptyLayerWithShape(layerCopy, myShape)
-                OffsetCurveFilter.offsetPath_offsetX_offsetY_makeStroke_position_(myShapeLayer, strokeWidth, strokeWidth, 1, 0)
-                shapes += myShapeLayer.shapes
+                offsetShapes = OffsetCurveFilter.offsetPath_offsetX_offsetY_makeStroke_position_(myShape, strokeWidth, strokeWidth, True, 0.0)
+                shapes += offsetShapes
                 i += 1
         layer.shapes = shapes
         return layer
