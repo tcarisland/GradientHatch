@@ -142,7 +142,7 @@
                         <font key="font" metaFont="system"/>
                     </buttonCell>
                     <connections>
-                        <action selector="useBackground:" target="-2" id="ydK-CI-BBy"/>
+                        <action selector="setUseBackground:" target="-2" id="ydK-CI-BBy"/>
                     </connections>
                 </button>
             </subviews>
