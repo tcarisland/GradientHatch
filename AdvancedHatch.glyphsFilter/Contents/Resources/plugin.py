@@ -160,7 +160,22 @@ class AdvancedHatch(FilterWithDialog):
 	@objc.python_method
 	def filter(self, layer, inEditView, customParameters):
 		if len(customParameters) > 0:
-			print("")
+			if customParameters.has_key('angle'):
+				angle = customParameters['angle']
+			if customParameters.has_key('offsetPath'):
+				offsetPath = customParameters['offsetPath']
+			if customParameters.has_key('offsetPathEnd'):
+				offsetPathEnd = customParameters['offsetPathEnd']
+			if customParameters.has_key('offsetPathStart'):
+				offsetPathStart = customParameters['offsetPathStart']
+			if customParameters.has_key('originX'):
+				originX = customParameters['originX']
+			if customParameters.has_key('originY'):
+				originY = customParameters['originY']
+			if customParameters.has_key('stepWidth'):
+				stepWidth = customParameters['stepWidth']
+			if customParameters.has_key('useBackground'):
+				useBackground = customParameters['useBackground']
 		else:
 			angle = float(self.pref('angle'))
 			offsetPath = bool(self.pref('offsetPath'))
