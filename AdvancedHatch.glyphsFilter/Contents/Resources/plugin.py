@@ -153,13 +153,12 @@ class AdvancedHatch(FilterWithDialog):
 
 	@objc.IBAction
 	def setUseBackground_(self, sender):
-		Glyphs.defaults[self.domain('useBackground_')] = sender.state()
+		Glyphs.defaults[self.domain('useBackground')] = sender.state()
 		self.update()
 
 	# Actual filter
 	@objc.python_method
 	def filter(self, layer, inEditView, customParameters):
-		layer.removeOverlap()
 		if len(customParameters) > 0:
 			print("")
 		else:
@@ -171,6 +170,9 @@ class AdvancedHatch(FilterWithDialog):
 			originY = float(self.pref('originY'))
 			stepWidth = float(self.pref('stepWidth'))
 			useBackground = bool(self.pref('useBackground'))
+		if useBackground:
+			layer.shapes = layer.background.shapes
+		layer.removeOverlap()
 		effects = AdvancedHatchEffects()
 		hatchAngle = angle
 		enableHatchStroke = offsetPath
@@ -178,7 +180,6 @@ class AdvancedHatch(FilterWithDialog):
 		hatchStep = stepWidth
 		hatchOrigin = [originX, originY]
 		layer = effects.hatchLayerWithOrigin(layer, hatchAngle, enableHatchStroke, hatchStroke, hatchStep, hatchOrigin)
-		print("filter done")
 
 	@objc.python_method
 	def generateCustomParameter( self ):
