@@ -18,7 +18,11 @@ class AdvancedHatchEffects():
     @objc.python_method
     def hatchLayerWithOrigin(self, layer, theta, enableHatchStroke, hatchStroke, hatchStep, hatchOrigin):
         HatchOutlineFilter = NSClassFromString("HatchOutlineFilter")
-        HatchOutlineFilter.hatchLayer_origin_stepWidth_angle_offset_checkSelection_shadowLayer_(layer, (int(hatchOrigin[0]), int(hatchOrigin[1])), hatchStep, theta, 0, False, None)
+        hatchOrigin = (int(hatchOrigin[0]), int(hatchOrigin[1]))
+        # TODO there seems to be different versions of the HatchOutlineFilter
+        # either add if-checks for versions with subsequent compatible calls or implement hatching manually
+        # HatchOutlineFilter.hatchLayer_origin_stepWidth_angle_offset_checkSelection_shadowLayer_(layer, hatchOrigin, hatchStep, theta, 0, False, None)
+        HatchOutlineFilter.hatchLayer_useBackground_origin_stepWidth_angle_(layer, False, hatchOrigin, hatchStep, theta)
         OffsetCurveFilter = NSClassFromString("GlyphsFilterOffsetCurve")
         shapesLength = len(layer.shapes)
         hatchStart = int(hatchStroke[0])
@@ -42,3 +46,4 @@ class AdvancedHatchEffects():
         emptyLayer = copy.deepcopy(layer)
         emptyLayer.shapes = [shape]
         return emptyLayer
+
