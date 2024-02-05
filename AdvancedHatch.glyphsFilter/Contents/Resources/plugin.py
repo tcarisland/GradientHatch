@@ -118,6 +118,7 @@ class AdvancedHatch(FilterWithDialog):
 	@objc.IBAction
 	def setOffsetPath_(self, sender):
 		Glyphs.defaults[self.domain('offsetPath')] = sender.state()
+		self.enableOffsetPathTextFields(bool(sender.state()))
 		self.update()
 
 	@objc.IBAction
@@ -129,6 +130,11 @@ class AdvancedHatch(FilterWithDialog):
 	def setOffsetPathStart_(self, sender):
 		Glyphs.defaults[self.domain('offsetPathStart')] = sender.floatValue()
 		self.update()
+
+	@objc.IBAction
+	def enableOffsetPathTextFields(self, areCheckboxesEnabled):
+		self.offsetPathStartTextField.setEnabled_(areCheckboxesEnabled)
+		self.offsetPathEndTextField.setEnabled_(areCheckboxesEnabled)
 
 	@objc.IBAction
 	def setOriginX_(self, sender):
