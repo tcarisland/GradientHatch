@@ -39,6 +39,7 @@ class AdvancedHatchEffects():
                 shapes += offsetShapes
                 i += 1
             layer.shapes = shapes
+        layer.removeOverlap()
         return layer
 
     @objc.python_method
@@ -46,4 +47,21 @@ class AdvancedHatchEffects():
         emptyLayer = copy.deepcopy(layer)
         emptyLayer.shapes = [shape]
         return emptyLayer
+
+    @objc.python_method
+    def intersectShapes(self, layer, originalShapes):
+        GSPathOperator = objc.lookUpClass("GSPathOperator")
+        layerShapes = copy.deepcopy(layer.shapes)
+        intersectedShapes = []
+        for shape in originalShapes:
+            for hatchShape in layerShapes:
+                shapeOne = [hatchShape]
+                shapeTwo = [shape]
+                GSPathOperator.intersectPaths_with_error_(shapeTwo, shapeOne, None)
+                for intersectedShape in shapeOne:
+                    intersectedShapes.append(intersectedShape)
+        layer.shapes = intersectedShapes
+        return layer
+
+
 
