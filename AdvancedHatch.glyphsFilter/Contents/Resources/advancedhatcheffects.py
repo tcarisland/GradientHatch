@@ -21,8 +21,8 @@ class AdvancedHatchEffects():
         hatchOrigin = (int(hatchOrigin[0]), int(hatchOrigin[1]))
         # TODO there seems to be different versions of the HatchOutlineFilter
         # either add if-checks for versions with subsequent compatible calls or implement hatching manually
-        # HatchOutlineFilter.hatchLayer_origin_stepWidth_angle_offset_checkSelection_shadowLayer_(layer, hatchOrigin, hatchStep, theta, 0, False, None)
-        HatchOutlineFilter.hatchLayer_useBackground_origin_stepWidth_angle_(layer, False, hatchOrigin, hatchStep, theta)
+        #HatchOutlineFilter.hatchLayer_useBackground_origin_stepWidth_angle_(layer, False, hatchOrigin, hatchStep, theta)
+        HatchOutlineFilter.hatchLayer_origin_stepWidth_angle_offset_checkSelection_shadowLayer_(layer, hatchOrigin, hatchStep, theta, 0, False, None)
         OffsetCurveFilter = NSClassFromString("GlyphsFilterOffsetCurve")
         shapesLength = len(layer.shapes)
         hatchStart = int(hatchStroke[0])
