@@ -25,6 +25,7 @@ from GlyphsApp.plugins import *
 # noinspection PyUnresolvedReferences
 from Foundation import NSClassFromString
 from advancedhatcheffects import AdvancedHatchEffects
+from advancedhatchutils import AdvancedHatchUtils
 
 # noinspection PyUnresolvedReferences
 class AdvancedHatch(FilterWithDialog):
@@ -194,7 +195,13 @@ class AdvancedHatch(FilterWithDialog):
 		hatchStroke = [offsetPathStart, offsetPathEnd]
 		hatchStep = stepWidth
 		hatchOrigin = [originX, originY]
+		layer.removeOverlap()
+		originalShapeLayer = copy.deepcopy(layer)
+		hatchUtils = AdvancedHatchUtils(outlineStrokeWidth=20, insetWidth=20)
+		layer.shapes = hatchUtils.prepareOutlineForIntersection(layer).shapes
 		layer = effects.hatchLayerWithOrigin(layer, hatchAngle, enableHatchStroke, hatchStroke, hatchStep, hatchOrigin)
+		layer = effects.intersectShapes(layer, originalShapeLayer.shapes)
+
 
 	@objc.python_method
 	def generateCustomParameter( self ):
