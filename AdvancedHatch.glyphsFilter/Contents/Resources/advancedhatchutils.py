@@ -5,6 +5,7 @@ import objc
 # noinspection PyUnresolvedReferences
 from Foundation import NSPoint
 
+
 class AdvancedHatchUtils():
 
     def __init__(self) -> None:
@@ -23,12 +24,11 @@ class AdvancedHatchUtils():
     @objc.python_method
     def cleanupDanglingShapes(self, layer, originalShapes):
         remainingShapes = []
-        layerShapes = copy.deepcopy(layer.shapes)
         for shape in originalShapes:
             for hatchShape in layer.shapes:
                 danglingShapesLayer = copy.deepcopy(layer)
                 danglingShapesLayer.shapes = [shape, hatchShape]
-                if(len(danglingShapesLayer.intersections()) > 0):
+                if len(danglingShapesLayer.intersections()) > 0:
                     remainingShapes.append(hatchShape)
         layer.shapes = remainingShapes
         return layer
