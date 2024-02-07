@@ -1,4 +1,4 @@
-### Alignment Palette
+### Advanced Hatch
 
 Built on top of the Hatch Outline filter
 
