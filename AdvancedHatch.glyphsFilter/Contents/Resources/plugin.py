@@ -198,10 +198,12 @@ class AdvancedHatch(FilterWithDialog):
 		layer.removeOverlap()
 		originalShapeLayer = copy.deepcopy(layer)
 		hatchUtils = AdvancedHatchUtils()
-		layer.shapes = hatchUtils.prepareOutlineForIntersection(layer, outlineStrokeWidth=20).shapes
+		if enableHatchStroke:
+			layer.shapes = hatchUtils.prepareOutlineForIntersection(layer, outlineStrokeWidth=20).shapes
 		layer = effects.hatchLayerWithOrigin(layer, hatchAngle, enableHatchStroke, hatchStroke, hatchStep, hatchOrigin)
-		layer = hatchUtils.cleanupDanglingShapes(layer, originalShapeLayer.shapes)
-		layer = effects.intersectShapes(layer, originalShapeLayer.shapes)
+		if enableHatchStroke:
+			layer = hatchUtils.cleanupDanglingShapes(layer, originalShapeLayer.shapes)
+			layer = effects.intersectShapes(layer, originalShapeLayer.shapes)
 
 
 	@objc.python_method
