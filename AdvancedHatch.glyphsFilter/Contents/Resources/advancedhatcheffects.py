@@ -63,5 +63,3 @@ class AdvancedHatchEffects():
         layer.shapes = intersectedShapes
         return layer
 
-
-
