@@ -61,7 +61,6 @@ class AdvancedHatchEffects():
                 for intersectedShape in shapeOne:
                     intersectedShapes.append(intersectedShape)
         layer.shapes = intersectedShapes
-        #layer.removeOverlap()
         return layer
 
 

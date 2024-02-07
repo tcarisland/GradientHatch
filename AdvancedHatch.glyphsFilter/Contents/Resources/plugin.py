@@ -197,7 +197,7 @@ class AdvancedHatch(FilterWithDialog):
 		hatchOrigin = [originX, originY]
 		layer.removeOverlap()
 		originalShapeLayer = copy.deepcopy(layer)
-		hatchUtils = AdvancedHatchUtils(outlineStrokeWidth=20, insetWidth=20)
+		hatchUtils = AdvancedHatchUtils(outlineStrokeWidth=20)
 		layer.shapes = hatchUtils.prepareOutlineForIntersection(layer).shapes
 		layer = effects.hatchLayerWithOrigin(layer, hatchAngle, enableHatchStroke, hatchStroke, hatchStep, hatchOrigin)
 		layer = effects.intersectShapes(layer, originalShapeLayer.shapes)
