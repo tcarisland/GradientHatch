@@ -51,16 +51,19 @@ class AdvancedHatch(FilterWithDialog):
 	@objc.python_method
 	def settings(self):
 		self.menuName = Glyphs.localize({
+			'cs': 'Pokročilé šrafování',
+			'de': 'Erweiterte Schraffur',
 			'en': 'Advanced Hatch',
-			'de': 'Advanced Hatch',
-			'fr': 'Advanced Hatch',
-			'es': 'Advanced Hatch',
-			'pt': 'Advanced Hatch',
-			'jp': 'Advanced Hatch',
-			'ko': 'Advanced Hatch',
-			'zh': 'Advanced Hatch',
-			})
-		# Word on Run Button (default: Apply)
+			'es': 'Eclosión avanzada',
+			'fr': 'Éclosion avancée',
+			'it': 'Cova avanzata',
+			'ja': '高度なハッチング',
+			'ko': '고급 해칭',
+			'pt': 'Incubação Avançada',
+			'ru': 'Расширенная штриховка',
+			'tr': 'Gelişmiş Kuluçka',
+			'zh_CN': '高级孵化',
+		})		# Word on Run Button (default: Apply)
 		self.actionButtonLabel = Glyphs.localize({
 			'en': 'Apply',
 			'de': 'Anwenden',
