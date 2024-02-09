@@ -24,8 +24,7 @@ from GlyphsApp import *
 from GlyphsApp.plugins import *
 # noinspection PyUnresolvedReferences
 from Foundation import NSClassFromString
-from advancedhatcheffects import AdvancedHatchEffects
-from advancedhatchutils import AdvancedHatchUtils
+from advancedhatchfilter import AdvancedHatchFilter
 
 # noinspection PyUnresolvedReferences
 class AdvancedHatch(FilterWithDialog):
@@ -163,6 +162,14 @@ class AdvancedHatch(FilterWithDialog):
 	# Actual filter
 	@objc.python_method
 	def filter(self, layer, inEditView, customParameters):
+		useBackground = False
+		offsetPathStart = 1
+		offsetPathEnd = 10
+		originX = 0
+		originY = 0
+		angle = 0
+		stepWidth = 10
+		offsetPath = True
 		if len(customParameters) > 0:
 			if customParameters.has_key('angle'):
 				angle = customParameters['angle']
@@ -191,23 +198,21 @@ class AdvancedHatch(FilterWithDialog):
 			useBackground = bool(self.pref('useBackground'))
 		if useBackground:
 			layer.shapes = layer.background.shapes
-		layer.removeOverlap()
-		effects = AdvancedHatchEffects()
-		hatchAngle = angle
-		enableHatchStroke = offsetPath
+		hatchFilter = AdvancedHatchFilter()
 		hatchStroke = [offsetPathStart, offsetPathEnd]
-		hatchStep = stepWidth
 		hatchOrigin = [originX, originY]
+		self.runFilter(layer, hatchFilter, angle, offsetPath, hatchStroke, stepWidth, hatchOrigin)
+
+	@objc.python_method
+	def runFilter(self, layer, hatchFilter, hatchAngle, enableHatchStroke, hatchStroke, hatchStep, hatchOrigin):
 		layer.removeOverlap()
 		originalShapeLayer = copy.deepcopy(layer)
-		hatchUtils = AdvancedHatchUtils()
 		if enableHatchStroke:
-			layer.shapes = hatchUtils.prepareOutlineForIntersection(layer, outlineStrokeWidth=20).shapes
-		layer = effects.hatchLayerWithOrigin(layer, hatchAngle, enableHatchStroke, hatchStroke, hatchStep, hatchOrigin)
+			layer.shapes = hatchFilter.prepareOutlineForIntersection(layer, outlineStrokeWidth=20).shapes
+		layer = hatchFilter.hatchLayerWithOrigin(layer, hatchAngle, enableHatchStroke, hatchStroke, hatchStep, hatchOrigin)
 		if enableHatchStroke:
-			layer = hatchUtils.cleanupDanglingShapes(layer, originalShapeLayer.shapes)
-			layer = effects.intersectShapes(layer, originalShapeLayer.shapes)
-
+			layer = hatchFilter.cleanupDanglingShapes(layer, originalShapeLayer.shapes)
+			layer = hatchFilter.intersectShapes(layer, originalShapeLayer.shapes)
 
 	@objc.python_method
 	def generateCustomParameter( self ):

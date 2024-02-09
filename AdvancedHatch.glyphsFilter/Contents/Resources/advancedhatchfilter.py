@@ -10,7 +10,7 @@ from Foundation import NSMakePoint
 # noinspection PyUnresolvedReferences
 from Foundation import NSClassFromString
 
-class AdvancedHatchEffects():
+class AdvancedHatchFilter():
 
     def __init__(self) -> None:
         super().__init__()
@@ -23,6 +23,7 @@ class AdvancedHatchEffects():
         # either add if-checks for versions with subsequent compatible calls or implement hatching manually
         #HatchOutlineFilter.hatchLayer_useBackground_origin_stepWidth_angle_(layer, False, hatchOrigin, hatchStep, theta)
         HatchOutlineFilter.hatchLayer_origin_stepWidth_angle_offset_checkSelection_shadowLayer_(layer, hatchOrigin, hatchStep, theta, 0, False, None)
+        #self.runHatchLayer(HatchOutlineFilter, layer, hatchOrigin, hatchStep, theta)
         OffsetCurveFilter = NSClassFromString("GlyphsFilterOffsetCurve")
         shapesLength = len(layer.shapes)
         hatchStart = int(hatchStroke[0])
@@ -41,6 +42,16 @@ class AdvancedHatchEffects():
             layer.shapes = shapes
         layer.removeOverlap()
         return layer
+
+    @objc.python_method
+    def runHatchLayer(self, HatchOutlineFilter, layer, hatchOrigin, hatchStep, theta):
+        if hasattr(HatchOutlineFilter, 'hatchLayer_useBackground_origin_stepWidth_angle_') and callable(HatchOutlineFilter.hatchLayer_useBackground_origin_stepWidth_angle_):
+            print("using case 1 " + "hatchLayer_useBackground_origin_stepWidth_angle_")
+            HatchOutlineFilter.hatchLayer_useBackground_origin_stepWidth_angle_(layer, False, hatchOrigin, hatchStep, theta)
+        else:
+            print("using case 2 " + "hatchLayer_origin_stepWidth_angle_offset_checkSelection_shadowLayer_")
+            HatchOutlineFilter.hatchLayer_origin_stepWidth_angle_offset_checkSelection_shadowLayer_(layer, hatchOrigin, hatchStep, theta, 0, False, None)
+
 
     @objc.python_method
     def getEmptyLayerWithShape(self, layer, shape):
@@ -63,3 +74,24 @@ class AdvancedHatchEffects():
         layer.shapes = intersectedShapes
         return layer
 
+    @objc.python_method
+    def prepareOutlineForIntersection(self, sourceLayer, outlineStrokeWidth):
+        layer = copy.deepcopy(sourceLayer)
+        for newPath in layer.shapes:
+            newPath.setAttribute_forKey_(outlineStrokeWidth, "strokeWidth")
+        layer.flattenOutlinesRemoveOverlap_origHints_secondaryPath_extraHandles_error_(False, None, None, None, None)
+        layer.shapes = layer.shapes + sourceLayer.shapes
+        layer.removeOverlap()
+        return layer
+
+    @objc.python_method
+    def cleanupDanglingShapes(self, layer, originalShapes):
+        remainingShapes = []
+        for shape in originalShapes:
+            for hatchShape in layer.shapes:
+                danglingShapesLayer = copy.deepcopy(layer)
+                danglingShapesLayer.shapes = [shape, hatchShape]
+                if len(danglingShapesLayer.intersections()) > 0:
+                    remainingShapes.append(hatchShape)
+        layer.shapes = remainingShapes
+        return layer
