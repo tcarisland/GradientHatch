@@ -197,19 +197,17 @@ class AdvancedHatch(FilterWithDialog):
 			useBackground = bool(self.pref('useBackground'))
 		if useBackground:
 			layer.shapes = layer.background.shapes
-		hatchStroke = [offsetPathStart, offsetPathEnd]
-		hatchOrigin = [originX, originY]
-		self.runFilter(layer, angle, offsetPath, hatchStroke, stepWidth, hatchOrigin)
+		self.runFilter(layer, angle, offsetPath, [offsetPathStart, offsetPathEnd], stepWidth, [originX, originY])
 
 	@objc.python_method
-	def runFilter(self, layer, hatchAngle, enableHatchStroke, hatchStroke, hatchStep, hatchOrigin):
+	def runFilter(self, layer, angle, offsetPathEnabled, strokeWidths, stepWidth, origin):
 		hatchFilter = AdvancedHatchFilter()
 		layer.removeOverlap()
 		originalShapeLayer = copy.deepcopy(layer)
-		if enableHatchStroke:
+		if offsetPathEnabled:
 			layer.shapes = hatchFilter.prepareOutlineForIntersection(layer, outlineStrokeWidth=20).shapes
-		layer = hatchFilter.hatchLayerWithOrigin(layer, hatchAngle, enableHatchStroke, hatchStroke, hatchStep, hatchOrigin)
-		if enableHatchStroke:
+		layer = hatchFilter.hatchLayerWithOrigin(layer, angle, offsetPathEnabled, strokeWidths, stepWidth, origin)
+		if offsetPathEnabled:
 			layer = hatchFilter.cleanupDanglingShapes(layer, originalShapeLayer.shapes)
 			layer = hatchFilter.intersectShapes(layer, originalShapeLayer.shapes)
 

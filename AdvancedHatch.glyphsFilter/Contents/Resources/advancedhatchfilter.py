@@ -17,24 +17,23 @@ class AdvancedHatchFilter():
         super().__init__()
 
     @objc.python_method
-    def hatchLayerWithOrigin(self, layer, theta, enableHatchStroke, hatchStroke, hatchStep, hatchOrigin):
+    def hatchLayerWithOrigin(self, layer, angle, offsetPathEnabled, strokeWidths, stepWidth, origin):
         HatchOutlineFilter = NSClassFromString("HatchOutlineFilter")
-        hatchOrigin = (int(hatchOrigin[0]), int(hatchOrigin[1]))
-        self.runHatchLayer(HatchOutlineFilter, layer, hatchOrigin, hatchStep, theta)
         OffsetCurveFilter = NSClassFromString("GlyphsFilterOffsetCurve")
+        self.runHatchLayer(HatchOutlineFilter, layer, [int(origin[0]), int(origin[1])], stepWidth, angle)
         shapesLength = len(layer.shapes)
-        hatchStart = int(hatchStroke[0])
-        hatchEnd = int(hatchStroke[1])
+        hatchStart = int(strokeWidths[0])
+        hatchEnd = int(strokeWidths[1])
         i = 0
         shapes = []
-        if enableHatchStroke:
+        if offsetPathEnabled:
             for myShape in layer.shapes:
                 endRatio = i / shapesLength
                 startShare = (1.0 - endRatio) * (hatchStart * 1.0)
                 endShare = endRatio * hatchEnd
-                strokeWidth = int(startShare + endShare)
-                offsetShapes = OffsetCurveFilter.offsetPath_offsetX_offsetY_makeStroke_position_(myShape, strokeWidth,
-                                                                                                 strokeWidth, True, 0.0)
+                offsetPath = int(startShare + endShare)
+                offsetShapes = OffsetCurveFilter.offsetPath_offsetX_offsetY_makeStroke_position_(myShape, offsetPath,
+                                                                                                 offsetPath, True, 0.0)
                 shapes += offsetShapes
                 i += 1
             layer.shapes = shapes
@@ -42,14 +41,14 @@ class AdvancedHatchFilter():
         return layer
 
     @objc.python_method
-    def runHatchLayer(self, HatchOutlineFilter, layer, hatchOrigin, hatchStep, theta):
+    def runHatchLayer(self, HatchOutlineFilter, layer, origin, stepWidth, angle):
         if hasattr(HatchOutlineFilter, 'hatchLayer_useBackground_origin_stepWidth_angle_') and callable(
                 HatchOutlineFilter.hatchLayer_useBackground_origin_stepWidth_angle_):
-            HatchOutlineFilter.hatchLayer_useBackground_origin_stepWidth_angle_(layer, False, hatchOrigin, hatchStep,
-                                                                                theta)
+            HatchOutlineFilter.hatchLayer_useBackground_origin_stepWidth_angle_(layer, False, origin, stepWidth,
+                                                                                angle)
         else:
-            HatchOutlineFilter.hatchLayer_origin_stepWidth_angle_offset_checkSelection_shadowLayer_(layer, hatchOrigin,
-                                                                                                    hatchStep, theta, 0,
+            HatchOutlineFilter.hatchLayer_origin_stepWidth_angle_offset_checkSelection_shadowLayer_(layer, origin,
+                                                                                                    stepWidth, angle, 0,
                                                                                                     False, None)
 
     @objc.python_method
@@ -106,7 +105,7 @@ class AdvancedHatchFilter():
         return layer
 
     @objc.python_method
-    def getLength(selfself, intersections):
+    def getLength(self, intersections):
         if hasattr(intersections, 'count'):
             return intersections.count()
         else:
