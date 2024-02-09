@@ -25,7 +25,7 @@ class AdvancedHatchFilter():
         shapesLength = len(layer.shapes)
         hatchStart = int(hatchStroke[0])
         hatchEnd = int(hatchStroke[1])
-        i = 0;
+        i = 0
         shapes = []
         if enableHatchStroke:
             for myShape in layer.shapes:
@@ -72,6 +72,7 @@ class AdvancedHatchFilter():
         layer.shapes = intersectedShapes
         return layer
 
+    @objc.python_method
     def intersect(self, shapeTwo, shapeOne):
         GSPathOperator = NSClassFromString("GSPathOperator")
         if hasattr(GSPathOperator, 'intersectPaths_with_error_') and callable(
