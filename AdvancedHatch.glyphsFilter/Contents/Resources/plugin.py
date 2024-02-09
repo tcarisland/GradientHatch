@@ -34,7 +34,6 @@ class AdvancedHatch(FilterWithDialog):
 	if Glyphs.versionNumber < 3:
 		# GLYPHS 2
 		pathOperator = NSClassFromString("GSPathOperator").alloc().init() # needs to be initialized only once
-
 	# The NSView object from the User Interface. Keep this here!
 	dialog = objc.IBOutlet()
 	# Text field in dialog
@@ -198,13 +197,13 @@ class AdvancedHatch(FilterWithDialog):
 			useBackground = bool(self.pref('useBackground'))
 		if useBackground:
 			layer.shapes = layer.background.shapes
-		hatchFilter = AdvancedHatchFilter()
 		hatchStroke = [offsetPathStart, offsetPathEnd]
 		hatchOrigin = [originX, originY]
-		self.runFilter(layer, hatchFilter, angle, offsetPath, hatchStroke, stepWidth, hatchOrigin)
+		self.runFilter(layer, angle, offsetPath, hatchStroke, stepWidth, hatchOrigin)
 
 	@objc.python_method
-	def runFilter(self, layer, hatchFilter, hatchAngle, enableHatchStroke, hatchStroke, hatchStep, hatchOrigin):
+	def runFilter(self, layer, hatchAngle, enableHatchStroke, hatchStroke, hatchStep, hatchOrigin):
+		hatchFilter = AdvancedHatchFilter()
 		layer.removeOverlap()
 		originalShapeLayer = copy.deepcopy(layer)
 		if enableHatchStroke:
