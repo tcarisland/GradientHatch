@@ -9,6 +9,7 @@ from GlyphsApp.plugins import *
 from Foundation import NSMakePoint
 # noinspection PyUnresolvedReferences
 from Foundation import NSClassFromString
+from hatchmetrics import HatchMetrics
 
 
 class AdvancedHatchFilter():
@@ -20,25 +21,35 @@ class AdvancedHatchFilter():
     def hatchLayerWithOrigin(self, layer, angle, offsetPathEnabled, strokeWidths, stepWidth, origin):
         HatchOutlineFilter = NSClassFromString("HatchOutlineFilter")
         OffsetCurveFilter = NSClassFromString("GlyphsFilterOffsetCurve")
+        hatchMetrics = HatchMetrics()
+        hatchMetrics.setGlyphHeightFromLayer(layer)
         self.runHatchLayer(HatchOutlineFilter, layer, [int(origin[0]), int(origin[1])], stepWidth, angle)
-        shapesLength = len(layer.shapes)
+        glyphHeight = hatchMetrics.getHeight()
         hatchStart = int(strokeWidths[0])
         hatchEnd = int(strokeWidths[1])
-        i = 0
         shapes = []
         if offsetPathEnabled:
             for myShape in layer.shapes:
-                endRatio = i / shapesLength
+                yPos = myShape.nodes[0].position.y + abs(hatchMetrics.descender)
+                yPos = self.clamp(yPos, 0, glyphHeight)
+                endRatio = yPos / glyphHeight
                 startShare = (1.0 - endRatio) * (hatchStart * 1.0)
                 endShare = endRatio * hatchEnd
                 offsetPath = int(startShare + endShare)
                 offsetShapes = OffsetCurveFilter.offsetPath_offsetX_offsetY_makeStroke_position_(myShape, offsetPath,
                                                                                                  offsetPath, True, 0.0)
                 shapes += offsetShapes
-                i += 1
             layer.shapes = shapes
         layer.removeOverlap()
         return layer
+
+    @objc.python_method
+    def clamp(self, value, minValue, maxValue):
+        if value < minValue:
+            return minValue
+        if value > maxValue:
+            return maxValue
+        return value
 
     @objc.python_method
     def runHatchLayer(self, HatchOutlineFilter, layer, origin, stepWidth, angle):
