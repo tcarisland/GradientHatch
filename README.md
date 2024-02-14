@@ -11,4 +11,3 @@ With this plugin you can create gradient hatched outlines.
 - Because it uses the initial Hatch Outline filter, it has some trouble hatching letters with counters where the innermost open area is treated as a solid shape.
 Hopefully this will be fixed in the future.
 - The localised labels are auto-translated, which means they probably don't have the best translations for languages other than English, feel free to make suggestions for better label names in a particular language if you know the language.
-- It doesn't work well with component Glyphs, make sure to decompose components before applying filter.
