@@ -10,9 +10,7 @@ class HatchMetrics():
 
     @objc.python_method
     def setGlyphHeightFromLayer(self, layer):
-        # GSMetricsTypeAscender = 1
         self.ascender = layer.ascender
-        # GSMetricsTypeDescender = 7
         self.descender = layer.descender
 
     @objc.python_method
