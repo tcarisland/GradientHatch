@@ -10,9 +10,14 @@ class HatchMetrics():
 
     @objc.python_method
     def getMetricFromLayer(self, layer, metricName):
-        for metricValueName in layer.master.metricValues:
-            if layer.master.metricValues[metricValueName].title() == metricName:
-                return int(layer.master.metricValues[metricValueName].position)
+        try:
+            for metricValueName in layer.master.metricValues:
+                if layer.master.metricValues[metricValueName].title() == metricName:
+                    return int(layer.master.metricValues[metricValueName].position)
+        except TypeError:
+            for metricValue in layer.master.metrics:
+                if metricValue.title() == metricName:
+                    return int(metricValue.position)
 
     @objc.python_method
     def setGlyphHeightFromLayer(self, layer):
