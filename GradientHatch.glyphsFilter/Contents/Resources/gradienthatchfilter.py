@@ -30,15 +30,16 @@ class GradientHatchFilter():
         shapes = []
         if offsetPathEnabled:
             for myShape in layer.shapes:
-                yPos = myShape.nodes[0].position.y + abs(hatchMetrics.descender)
-                yPos = self.clamp(yPos, 0, glyphHeight)
-                endRatio = yPos / glyphHeight
-                startShare = (1.0 - endRatio) * (hatchStart * 1.0)
-                endShare = endRatio * hatchEnd
-                offsetPath = int(startShare + endShare)
-                offsetShapes = OffsetCurveFilter.offsetPath_offsetX_offsetY_makeStroke_position_(myShape, offsetPath,
-                                                                                                 offsetPath, True, 0.0)
-                shapes += offsetShapes
+                if myShape.shapeType != 4:
+                    yPos = myShape.nodes[0].position.y + abs(hatchMetrics.descender)
+                    yPos = self.clamp(yPos, 0, glyphHeight)
+                    endRatio = yPos / glyphHeight
+                    startShare = (1.0 - endRatio) * (hatchStart * 1.0)
+                    endShare = endRatio * hatchEnd
+                    offsetPath = int(startShare + endShare)
+                    offsetShapes = OffsetCurveFilter.offsetPath_offsetX_offsetY_makeStroke_position_(myShape, offsetPath,
+                                                                                                     offsetPath, True, 0.0)
+                    shapes += offsetShapes
             layer.shapes = shapes
         layer.removeOverlap()
         return layer

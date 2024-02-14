@@ -213,6 +213,7 @@ class GradientHatch(FilterWithDialog):
 
 	@objc.python_method
 	def runFilter(self, layer, angle, offsetPathEnabled, strokeWidths, stepWidth, origin, expandBeforeInset):
+		components = self.getComponentsFromLayer(layer)
 		hatchFilter = GradientHatchFilter()
 		layer.removeOverlap()
 		originalShapeLayer = copy.deepcopy(layer)
@@ -222,6 +223,15 @@ class GradientHatch(FilterWithDialog):
 		if offsetPathEnabled:
 			layer = hatchFilter.cleanupDanglingShapes(layer, originalShapeLayer.shapes)
 			layer = hatchFilter.intersectShapes(layer, originalShapeLayer.shapes)
+		layer.shapes = layer.shapes + components
+
+	@objc.python_method
+	def getComponentsFromLayer(self, layer):
+		components = []
+		for shape in layer.shapes:
+			if shape.shapeType == 4:
+				components.append(shape)
+		return components
 
 	@objc.python_method
 	def generateCustomParameter( self ):
