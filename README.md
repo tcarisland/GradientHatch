@@ -1,10 +1,10 @@
-### Advanced Hatch
+### Gradient Hatch
 
 Built on top of the Hatch Outline filter
 
 With this plugin you can create gradient hatched outlines.
 
-<img src="https://raw.githubusercontent.com/tcarisland/AdvancedHatch/main/AdvancedHatchPreview.png" width="826" />
+<img src="https://raw.githubusercontent.com/tcarisland/GradientHatch/main/GradientHatchPreview.png" width="826" />
 
 #### Known Problems
 

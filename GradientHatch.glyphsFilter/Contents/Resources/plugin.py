@@ -24,13 +24,13 @@ from GlyphsApp import *
 from GlyphsApp.plugins import *
 # noinspection PyUnresolvedReferences
 from Foundation import NSClassFromString
-from advancedhatchfilter import AdvancedHatchFilter
+from gradienthatchfilter import GradientHatchFilter
 
 # noinspection PyUnresolvedReferences
-class AdvancedHatch(FilterWithDialog):
+class GradientHatch(FilterWithDialog):
 
 	# Definitions of IBOutlets
-	prefID = "com.tcarisland.AdvancedHatch"
+	prefID = "com.tcarisland.GradientHatch"
 	if Glyphs.versionNumber < 3:
 		# GLYPHS 2
 		pathOperator = NSClassFromString("GSPathOperator").alloc().init() # needs to be initialized only once
@@ -50,18 +50,18 @@ class AdvancedHatch(FilterWithDialog):
 	@objc.python_method
 	def settings(self):
 		self.menuName = Glyphs.localize({
-			'cs': 'Pokročilé šrafování',
-			'de': 'Erweiterte Schraffur',
-			'en': 'Advanced Hatch',
-			'es': 'Eclosión avanzada',
-			'fr': 'Éclosion avancée',
-			'it': 'Cova avanzata',
-			'ja': '高度なハッチング',
-			'ko': '고급 해칭',
-			'pt': 'Incubação Avançada',
-			'ru': 'Расширенная штриховка',
-			'tr': 'Gelişmiş Kuluçka',
-			'zh_CN': '高级孵化',
+			'cs': 'Postupné šrafování',
+			'de': 'Stufenweises Schraffieren',
+			'en': 'Gradient Hatch',
+			'es': 'Eclosión Gradual',
+			'fr': 'Éclosion par étapes',
+			'it': 'Cova graduale',
+			'ja': '段階的なハッチング',
+			'ko': '단계별 해칭',
+			'pt': 'Incubação gradual',
+			'ru': 'Поэтапная штриховка',
+			'tr': 'Kademeli Kuluçka',
+			'zh_CN': '逐步孵化',
 		})		# Word on Run Button (default: Apply)
 		self.actionButtonLabel = Glyphs.localize({
 			'en': 'Apply',
@@ -213,7 +213,7 @@ class AdvancedHatch(FilterWithDialog):
 
 	@objc.python_method
 	def runFilter(self, layer, angle, offsetPathEnabled, strokeWidths, stepWidth, origin, expandBeforeInset):
-		hatchFilter = AdvancedHatchFilter()
+		hatchFilter = GradientHatchFilter()
 		layer.removeOverlap()
 		originalShapeLayer = copy.deepcopy(layer)
 		if offsetPathEnabled:

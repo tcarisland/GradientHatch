@@ -12,7 +12,7 @@ from Foundation import NSClassFromString
 from hatchmetrics import HatchMetrics
 
 
-class AdvancedHatchFilter():
+class GradientHatchFilter():
 
     def __init__(self) -> None:
         super().__init__()

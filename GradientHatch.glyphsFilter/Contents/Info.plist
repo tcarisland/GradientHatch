@@ -7,11 +7,11 @@
 	<key>CFBundleExecutable</key>
 	<string>plugin</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.com.tcarisland.AdvancedHatch</string>
+	<string>com.tcarisland.GradientHatch</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>AdvancedHatch</string>
+	<string>GradientHatch</string>
 	<key>CFBundleShortVersionString</key>
 	<string>0.1</string> <!-- 1.0 -->
 	<key>CFBundleVersion</key>
@@ -23,9 +23,9 @@
 	<key>productReleaseNotes</key>
 	<string>____LatestReleaseNotes____</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright, com.tcarisland, 2024</string>
+	<string>Copyright, Thor Arisland, 2024</string>
 	<key>NSPrincipalClass</key>
-	<string>AdvancedHatch</string>
+	<string>GradientHatch</string>
 	<key>PyMainFileNames</key>
 	<array>
 		<string>plugin.py</string>
