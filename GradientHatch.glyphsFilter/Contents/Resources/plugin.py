@@ -153,7 +153,9 @@ class GradientHatch(FilterWithDialog):
 
 	@objc.IBAction
 	def setStepWidth_(self, sender):
-		Glyphs.defaults[self.domain('stepWidth')] = sender.floatValue()
+		stepWidth = abs(sender.intValue())
+		self.stepWidthTextField.setStringValue_(str(stepWidth))
+		Glyphs.defaults[self.domain('stepWidth')] = stepWidth
 		self.update()
 
 	@objc.IBAction
@@ -213,6 +215,7 @@ class GradientHatch(FilterWithDialog):
 
 	@objc.python_method
 	def runFilter(self, layer, angle, offsetPathEnabled, strokeWidths, stepWidth, origin, expandBeforeInset):
+		stepWidth = abs(stepWidth)
 		components = self.getComponentsFromLayer(layer)
 		hatchFilter = GradientHatchFilter()
 		layer.removeOverlap()
