@@ -45,6 +45,7 @@ class AdvancedHatch(FilterWithDialog):
 	originYTextField = objc.IBOutlet()
 	stepWidthTextField = objc.IBOutlet()
 	useBackgroundCheckBox = objc.IBOutlet()
+	expandBeforeInsetSlider = objc.IBOutlet()
 
 	@objc.python_method
 	def settings(self):
@@ -88,6 +89,7 @@ class AdvancedHatch(FilterWithDialog):
 		self.stepWidthTextField.setStringValue_(self.pref('stepWidth'))
 		self.offsetPathCheckBox.setState_(self.pref('offsetPath'))
 		self.useBackgroundCheckBox.setState_(self.pref('useBackground'))
+		self.expandBeforeInsetSlider.setStringValue_(self.pref('expandBeforeInset'))
 		self.update()
 
 	@objc.python_method
@@ -110,6 +112,7 @@ class AdvancedHatch(FilterWithDialog):
 		Glyphs.registerDefault(self.domain('originY'), 0.0)
 		Glyphs.registerDefault(self.domain('stepWidth'), 5)
 		Glyphs.registerDefault(self.domain('useBackground'), 1)
+		Glyphs.registerDefault(self.domain('expandBeforeInset'), 20)
 
 
 	@objc.IBAction
@@ -158,6 +161,11 @@ class AdvancedHatch(FilterWithDialog):
 		Glyphs.defaults[self.domain('useBackground')] = sender.state()
 		self.update()
 
+	@objc.IBAction
+	def setExpandBeforeInset_(self, sender):
+		Glyphs.defaults[self.domain('expandBeforeInset')] = sender.floatValue()
+		self.update()
+
 	# Actual filter
 	@objc.python_method
 	def filter(self, layer, inEditView, customParameters):
@@ -169,6 +177,7 @@ class AdvancedHatch(FilterWithDialog):
 		angle = 0
 		stepWidth = 10
 		offsetPath = True
+		expandBeforeInset = 20
 		if len(customParameters) > 0:
 			if customParameters.has_key('angle'):
 				angle = customParameters['angle']
@@ -186,6 +195,8 @@ class AdvancedHatch(FilterWithDialog):
 				stepWidth = customParameters['stepWidth']
 			if customParameters.has_key('useBackground'):
 				useBackground = customParameters['useBackground']
+			if customParameters.has_key('expandBeforeInset'):
+				expandBeforeInset = customParameters['expandBeforeInset']
 		else:
 			angle = float(self.pref('angle'))
 			offsetPath = bool(self.pref('offsetPath'))
@@ -195,17 +206,18 @@ class AdvancedHatch(FilterWithDialog):
 			originY = float(self.pref('originY'))
 			stepWidth = float(self.pref('stepWidth'))
 			useBackground = bool(self.pref('useBackground'))
+			expandBeforeInset = float(self.pref('expandBeforeInset'))
 		if useBackground:
 			layer.shapes = layer.background.shapes
-		self.runFilter(layer, angle, offsetPath, [offsetPathStart, offsetPathEnd], stepWidth, [originX, originY])
+		self.runFilter(layer, angle, offsetPath, [offsetPathStart, offsetPathEnd], stepWidth, [originX, originY], expandBeforeInset)
 
 	@objc.python_method
-	def runFilter(self, layer, angle, offsetPathEnabled, strokeWidths, stepWidth, origin):
+	def runFilter(self, layer, angle, offsetPathEnabled, strokeWidths, stepWidth, origin, expandBeforeInset):
 		hatchFilter = AdvancedHatchFilter()
 		layer.removeOverlap()
 		originalShapeLayer = copy.deepcopy(layer)
 		if offsetPathEnabled:
-			layer.shapes = hatchFilter.prepareOutlineForIntersection(layer, outlineStrokeWidth=20).shapes
+			layer.shapes = hatchFilter.prepareOutlineForIntersection(layer, expandBeforeInset).shapes
 		layer = hatchFilter.hatchLayerWithOrigin(layer, angle, offsetPathEnabled, strokeWidths, stepWidth, origin)
 		if offsetPathEnabled:
 			layer = hatchFilter.cleanupDanglingShapes(layer, originalShapeLayer.shapes)
@@ -214,7 +226,7 @@ class AdvancedHatch(FilterWithDialog):
 	@objc.python_method
 	def generateCustomParameter( self ):
 		self.registerDefaults()
-		return "%s; angle:%s offsetPath:%i offsetPathEnd:%s offsetPathStart:%s originX:%s originY:%s stepWidth:%s useBackground:%i" % (
+		return "%s; angle:%s offsetPath:%i offsetPathEnd:%s offsetPathStart:%s originX:%s originY:%s stepWidth:%s useBackground:%i expandBeforeInset:%s" % (
 			self.__class__.__name__,
 			self.pref('angle'),
 			self.pref('offsetPath'),
@@ -223,7 +235,8 @@ class AdvancedHatch(FilterWithDialog):
 			self.pref('originX'),
 			self.pref('originY'),
 			self.pref('stepWidth'),
-			self.pref('useBackground')
+			self.pref('useBackground'),
+			self.pref('expandBeforeInset'),
 			)
 
 	@objc.python_method

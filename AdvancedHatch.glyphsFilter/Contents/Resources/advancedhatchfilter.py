@@ -95,6 +95,7 @@ class AdvancedHatchFilter():
     @objc.python_method
     def prepareOutlineForIntersection(self, sourceLayer, outlineStrokeWidth):
         layer = copy.deepcopy(sourceLayer)
+        outlineStrokeWidth = int(outlineStrokeWidth)
         for newPath in layer.shapes:
             newPath.setAttribute_forKey_(outlineStrokeWidth, "strokeWidth")
         layer.flattenOutlinesRemoveOverlap_origHints_secondaryPath_extraHandles_error_(False, None, None, None, None)
