@@ -1,4 +1,3 @@
-import objc
 import copy
 from Foundation import NSClassFromString
 from hatchmetrics import HatchMetrics
@@ -9,7 +8,6 @@ class GradientHatchFilter():
     def __init__(self) -> None:
         super().__init__()
 
-    @objc.python_method
     def hatchLayerWithOrigin(self, layer, angle, offsetPathEnabled, strokeWidths, stepWidth, origin):
         HatchOutlineFilter = NSClassFromString("HatchOutlineFilter")
         OffsetCurveFilter = NSClassFromString("GlyphsFilterOffsetCurve")
@@ -36,7 +34,6 @@ class GradientHatchFilter():
         layer.removeOverlap()
         return layer
 
-    @objc.python_method
     def clamp(self, value, minValue, maxValue):
         if value < minValue:
             return minValue
@@ -44,7 +41,6 @@ class GradientHatchFilter():
             return maxValue
         return value
 
-    @objc.python_method
     def runHatchLayer(self, HatchOutlineFilter, layer, origin, stepWidth, angle):
         if hasattr(HatchOutlineFilter, 'hatchLayer_useBackground_origin_stepWidth_angle_') and callable(
                 HatchOutlineFilter.hatchLayer_useBackground_origin_stepWidth_angle_):
@@ -55,13 +51,11 @@ class GradientHatchFilter():
                                                                                                     stepWidth, angle, 0,
                                                                                                     False, None)
 
-    @objc.python_method
     def getEmptyLayerWithShape(self, layer, shape):
         emptyLayer = copy.deepcopy(layer)
         emptyLayer.shapes = [shape]
         return emptyLayer
 
-    @objc.python_method
     def intersectShapes(self, layer, originalShapes):
         layerShapes = copy.deepcopy(layer.shapes)
         intersectedShapes = []
@@ -75,7 +69,6 @@ class GradientHatchFilter():
         layer.shapes = intersectedShapes
         return layer
 
-    @objc.python_method
     def intersect(self, shapeTwo, shapeOne):
         GSPathOperator = NSClassFromString("GSPathOperator")
         if hasattr(GSPathOperator, 'intersectPaths_with_error_') and callable(
@@ -85,7 +78,6 @@ class GradientHatchFilter():
             GSPathOperator.intersectPaths_from_error_(shapeTwo, shapeOne, None)
         return shapeOne
 
-    @objc.python_method
     def prepareOutlineForIntersection(self, sourceLayer, outlineStrokeWidth):
         layer = copy.deepcopy(sourceLayer)
         outlineStrokeWidth = int(outlineStrokeWidth)
@@ -96,7 +88,6 @@ class GradientHatchFilter():
         layer.removeOverlap()
         return layer
 
-    @objc.python_method
     def cleanupDanglingShapes(self, layer, originalShapes):
         remainingShapes = []
         for shape in originalShapes:
@@ -109,7 +100,6 @@ class GradientHatchFilter():
         layer.shapes = remainingShapes
         return layer
 
-    @objc.python_method
     def getLength(self, intersections):
         if hasattr(intersections, 'count'):
             return intersections.count()
