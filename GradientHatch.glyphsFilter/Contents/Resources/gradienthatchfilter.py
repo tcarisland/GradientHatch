@@ -1,13 +1,5 @@
-# noinspection PyUnresolvedReferences
 import objc
 import copy
-# noinspection PyUnresolvedReferences
-from GlyphsApp import *
-# noinspection PyUnresolvedReferences
-from GlyphsApp.plugins import *
-# noinspection PyUnresolvedReferences
-from Foundation import NSMakePoint
-# noinspection PyUnresolvedReferences
 from Foundation import NSClassFromString
 from hatchmetrics import HatchMetrics
 

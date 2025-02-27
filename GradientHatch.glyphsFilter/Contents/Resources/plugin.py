@@ -15,25 +15,21 @@
 ###########################################################################################################
 
 from __future__ import division, print_function, unicode_literals
-# noinspection PyUnresolvedReferences
 import objc
 import copy
-# noinspection PyUnresolvedReferences
-from GlyphsApp import *
-# noinspection PyUnresolvedReferences
-from GlyphsApp.plugins import *
-# noinspection PyUnresolvedReferences
+from GlyphsApp import Glyphs
+from GlyphsApp.plugins import FilterWithDialog
 from Foundation import NSClassFromString
 from gradienthatchfilter import GradientHatchFilter
 
-# noinspection PyUnresolvedReferences
+
 class GradientHatch(FilterWithDialog):
 
 	# Definitions of IBOutlets
 	prefID = "com.tcarisland.GradientHatch"
 	if Glyphs.versionNumber < 3:
 		# GLYPHS 2
-		pathOperator = NSClassFromString("GSPathOperator").alloc().init() # needs to be initialized only once
+		pathOperator = NSClassFromString("GSPathOperator").alloc().init()  # needs to be initialized only once
 	# The NSView object from the User Interface. Keep this here!
 	dialog = objc.IBOutlet()
 	# Text field in dialog
@@ -72,7 +68,7 @@ class GradientHatch(FilterWithDialog):
 			'jp': '申し込む',
 			'ko': '대다',
 			'zh': '应用',
-			})
+		})
 		# Load dialog from .nib (without .extension)
 		self.loadNib('IBdialog', __file__)
 
@@ -113,7 +109,6 @@ class GradientHatch(FilterWithDialog):
 		Glyphs.registerDefault(self.domain('stepWidth'), 5)
 		Glyphs.registerDefault(self.domain('useBackground'), 1)
 		Glyphs.registerDefault(self.domain('expandBeforeInset'), 20)
-
 
 	@objc.IBAction
 	def setAngle_(self, sender):
@@ -237,7 +232,7 @@ class GradientHatch(FilterWithDialog):
 		return components
 
 	@objc.python_method
-	def generateCustomParameter( self ):
+	def generateCustomParameter(self):
 		self.registerDefaults()
 		return "%s; angle:%s offsetPath:%i offsetPathEnd:%s offsetPathStart:%s originX:%s originY:%s stepWidth:%s useBackground:%i expandBeforeInset:%s" % (
 			self.__class__.__name__,
@@ -250,7 +245,7 @@ class GradientHatch(FilterWithDialog):
 			self.pref('stepWidth'),
 			self.pref('useBackground'),
 			self.pref('expandBeforeInset'),
-			)
+		)
 
 	@objc.python_method
 	def __file__(self):
